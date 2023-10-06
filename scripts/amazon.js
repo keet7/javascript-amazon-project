@@ -1,4 +1,4 @@
-let productsHTML = '';
+let productsHTML = "";
 products.forEach((product) => {
   productsHTML += `
     <div class="product-container">
@@ -16,12 +16,14 @@ products.forEach((product) => {
       <div class="product-rating-container">
         <img
           class="product-rating-stars"
-          src="images/ratings/rating-${(product.rating.stars) * 10}.png"
+          src="images/ratings/rating-${product.rating.stars * 10}.png"
         />
-        <div class="product-rating-count link-primary">${product.rating.count}</div>
+        <div class="product-rating-count link-primary">${
+          product.rating.count
+        }</div>
       </div>
 
-      <div class="product-price">$${(product.priceCents /100).toFixed(2)}</div>
+      <div class="product-price">$${(product.priceCents / 100).toFixed(2)}</div>
 
       <div class="product-quantity-container">
         <select>
@@ -45,12 +47,36 @@ products.forEach((product) => {
         Added
       </div>
 
-      <button class="add-to-cart-button button-primary">Add to Cart</button>
+      <button class="add-to-cart-button button-primary js-add-to-cart"
+      data-product-id="${product.id}">Add to Cart</button>
     </div>`;
-
-  
 });
 
-console.log(productsHTML);
+//console.log(productsHTML);
 
-document.querySelector('.js-products-grid').innerHTML = productsHTML;
+document.querySelector(".js-products-grid").innerHTML = productsHTML;
+
+document.querySelectorAll(".js-add-to-cart").forEach((button) => {
+  button.addEventListener("click", () => {
+    //console.log('Added Product');
+    const productId = button.dataset.productId;
+    let matchingItem;
+    cart.forEach((item) => {
+      if(productId === item.productId) {
+        matchingItem = item;
+      } 
+    });
+
+    if(matchingItem) {
+      matchingItem.quantity += 1;
+    } else{
+      cart.push({
+        productId: productId,
+        quantity: 1
+      });
+    }
+    console.log(cart);
+    // check if the product is already in the cart
+    // if it present then just increase the quantity
+  });
+});
